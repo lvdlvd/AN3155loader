@@ -1,16 +1,18 @@
 /*
-   STMLoader can communicate with STM32xxx builtin UART bootloaders to read and write RAM and Flash and execute programs.
+   AN3155loader can communicate with STM32xxx builtin UART bootloaders to read and write RAM and Flash and execute programs.
+
    See
    	AN2606 Application note STM32 microcontroller system memory boot mode
    	AN3155 Application note USART protocol used in the STM32 bootloader
 
    - get, getv, getid
    - read addr [len]
-   - write addr val
-   - erase
-   - flash file.hex
+   - bulk erase
+   - flash/verify file.hex
    - go addr
    - copy remaining serial to stdout
+
+   make your application use the same baudrate/8bits/even parity for the last bit to work
 
 */
 package main
@@ -134,7 +136,6 @@ func main() {
 				}
 			}
 		}
-
 	}
 
 	log.Printf("Go to 0x%08x...", startaddr)
@@ -323,6 +324,7 @@ func cmdWrite(rw io.ReadWriter, addr uint32, buf []byte) error {
 }
 
 func cmdBulkErase(rw io.ReadWriter) error {
+	// todo check if we should use basic 0x43 or extended 0x44 code. also implement banks.
 	if err := sendCmd(rw, 0x44); err != nil {
 		return err
 	}
@@ -370,6 +372,7 @@ func writeMem(rw io.ReadWriter, addr uint32, buf []byte) error {
 	return nil
 }
 
+// https://play.golang.org/p/I-gPW4OJzAE
 type Segment struct {
 	Next    *Segment
 	Address uint32
