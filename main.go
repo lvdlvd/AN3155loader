@@ -348,8 +348,9 @@ func readMem(rw io.ReadWriter, addr uint32, sz int) ([]byte, error) {
 		if err != nil {
 			return buf, err
 		}
-		os.Stderr.Write([]byte(":"))
+		os.Stderr.Write([]byte("."))
 	}
+	os.Stderr.Write([]byte("\n"))
 	return buf, nil
 }
 
@@ -366,9 +367,9 @@ func writeMem(rw io.ReadWriter, addr uint32, buf []byte) error {
 		if err := cmdWrite(rw, addr, buf); err != nil {
 			return err
 		}
-		os.Stderr.Write([]byte(":"))
+		os.Stderr.Write([]byte("."))
 	}
-
+	os.Stderr.Write([]byte("\n"))
 	return nil
 }
 
