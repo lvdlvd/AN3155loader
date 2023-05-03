@@ -100,6 +100,10 @@ func main() {
 		log.Fatal("cmd GETID: ", err)
 	}
 	log.Printf("Product ID: %02x%02x", buf[0], buf[1])
+	// See  AN2606 Rev 54, p394, Table 159. Bootloader device-dependent parameters
+	// 0x468: Category 2 devices (See Table 1: STM32G4 Series memory density)
+	// 0x469: Category 3 devices (See Table 1: STM32G4 Series memory density)
+	// 0x479: Category 4 devices (See Table 1: STM32G4 Series memory density)
 
 	if true {
 		buf, err = cmdRead(dev, 0x1FFF7800, 0x30)
